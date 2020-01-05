@@ -2,71 +2,57 @@ package service;
 
 import DAO.UserDAO;
 import model.User;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import utils.DBHelper;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
     private static UserService instance;
+    private SessionFactory sessionFactory;
 
-    public UserService() {
+    private UserService(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public static UserService getInstance() {
         if (instance == null) {
-            instance = new UserService();
+            instance = new UserService(DBHelper.getSessionFactory());
         }
         return instance;
     }
 
-    private static UserDAO getUserDAO() {
-        return new UserDAO(getMySQLConnection());
-    }
 
     public List<User> getAllUsers() {
-        return getUserDAO().getAllUsers();
+        Session session = sessionFactory.openSession();
+        UserDAO userDAO = new UserDAO(session);
+        List<User> list = userDAO.getAllUsers();
+        return list;
     }
 
-    public boolean addUser(User user) {
-        return getUserDAO().addUser(user);
+    public void addUser(User user) {
+        Session session = sessionFactory.openSession();
+        UserDAO userDAO = new UserDAO(session);
+        userDAO.addUser(user);
     }
 
     public User getUserById(Long id) {
-        return getUserDAO().getUserById(id);
-    }
-
-    public boolean deleteUser(User user) {
-        return getUserDAO().deleteUser(user);
-    }
-
-    public boolean editUser(User user) {
-        return getUserDAO().editUser(user);
+        Session session = sessionFactory.openSession();
+        UserDAO userDAO = new UserDAO(session);
+        return userDAO.getUserById(id);
     }
 
 
-    private static Connection getMySQLConnection() {
-        {
-            try {
-                DriverManager.registerDriver((Driver) Class.forName("com.mysql.cj.jdbc.Driver").newInstance());
-                StringBuilder url = new StringBuilder();
+    public void deleteUser(Long id) {
+        Session session = sessionFactory.openSession();
+        UserDAO userDAO = new UserDAO(session);
+        userDAO.deleteUser(id);
+    }
 
-                url.
-                        append("jdbc:mysql://").        //db type
-                        append("localhost:").           //host name
-                        append("3306/").                //port
-                        append("pp1?").                //db name
-                        append("user=root&").           //login
-                        append("password=0268q7410").  //password
-                        append("&serverTimezone=UTC");  //setup server time
-
-                return DriverManager.getConnection(url.toString());
-            } catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                e.printStackTrace();
-                throw new IllegalStateException();
-            }
-        }
+    public void editUser(User user) {
+        Session session = sessionFactory.openSession();
+        UserDAO userDAO = new UserDAO(session);
+        userDAO.editUser(user);
     }
 }

@@ -18,7 +18,7 @@
         Email: <br><input type="email" name="email"> <br>
         <input type="submit" value="Add user">
     </form>
-    <form action="/allusers" method="GET">
+    <form action="index.jsp" method="GET">
         <input type="submit" value="Go back">
     </form>
 </section>

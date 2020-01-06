@@ -55,9 +55,8 @@ public class DBHelper {
         try {
             DriverManager.registerDriver((Driver)
                     Class.forName(Config.getInstance().getDriverClass()).newInstance());
-            Connection connection = DriverManager.getConnection(Config.getInstance().getDbUrl(),
+            return DriverManager.getConnection(Config.getInstance().getDbUrl(),
                     Config.getInstance().getDblogin(), Config.getInstance().getDbPassword());
-            return connection;
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             throw new IllegalStateException();

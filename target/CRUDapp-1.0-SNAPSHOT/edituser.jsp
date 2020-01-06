@@ -18,7 +18,7 @@
         Email: <br><input type="email" name="email" value=${email}> <br>
         <input type="submit" value="Edit User">
     </form>
-    <form action="index.jsp" method="POST">
+    <form action="index.jsp" method="GET">
         <input type="submit" value="Go back">
     </form>
 </section>

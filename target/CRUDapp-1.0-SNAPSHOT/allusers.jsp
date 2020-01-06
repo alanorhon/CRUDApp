@@ -12,7 +12,7 @@
     <title>List of all registered Users</title>
 </head>
 <body>
-<table style=" width: 15%; border: 4px double black;">
+<table style=" width: 30%; border: none">
     <tr>
         <th>Id</th>
         <th>Name</th>

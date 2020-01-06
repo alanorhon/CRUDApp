@@ -14,11 +14,11 @@ public class UserHibernateDAO implements UserDAOInterface {
     private static SessionFactory sessionFactory;
 
     private UserHibernateDAO(SessionFactory daoSessionFactory) {
-        sessionFactory=daoSessionFactory;
+        sessionFactory = daoSessionFactory;
     }
 
-    public static UserHibernateDAO getInstance(SessionFactory sessionFactory){
-        if(instance==null){
+    public static UserHibernateDAO getInstance(SessionFactory sessionFactory) {
+        if (instance == null) {
 
             instance = new UserHibernateDAO(sessionFactory);
         }
@@ -63,9 +63,9 @@ public class UserHibernateDAO implements UserDAOInterface {
     public void editUser(User user) {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("update User "
-                + "SET login =:login "
-                + ", password  =:password "
-                + ", email      =:email ");
+                + "SET login=:login "
+                + ", password=:password"
+                + ", email=:email");
         query.setParameter("login", user.getLogin());
         query.setParameter("password", user.getPassword());
         query.setParameter("email", user.getEmail());

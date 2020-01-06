@@ -15,12 +15,5 @@
     <li><a href="adduser.jsp">Add user</a></li>
     <li><a href="/allusers">Show all users</a></li>
 </ul>
-<section class="container">
-    <%
-        if (request.getAttribute("message") != null) {
-            out.println(request.getAttribute("message"));
-        }
-    %>
-</section>
 </body>
 </html>

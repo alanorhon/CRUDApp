@@ -12,10 +12,10 @@
 </head>
 <section class="fields">
     <form action="/edituser" method="POST">
-        <input type="hidden" name="id">
-        Login: <br><input type="text" name="login"> <br>
-        Password: <br><input type="text" name="password"> <br>
-        Email: <br><input type="email" name="email"> <br>
+        <input type="hidden" name="id" value=${id}>
+        Login: <br><input type="text" name="login" value=${login}> <br>
+        Password: <br><input type="text" name="password" value=${password}> <br>
+        Email: <br><input type="email" name="email" value=${email}> <br>
         <input type="submit" value="Edit User">
     </form>
     <form action="index.jsp" method="POST">

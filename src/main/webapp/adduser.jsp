@@ -16,10 +16,14 @@
         Login: <br><input type="text" name="login"> <br>
         Password: <br><input type="text" name="password"> <br>
         Email: <br><input type="email" name="email"> <br>
+        Role: <br><input type="text" name="role" value="user"><br>
         <input type="submit" value="Add user">
     </form>
     <form action="index.jsp" method="GET">
         <input type="submit" value="Go back">
+    </form>
+    <form action="user.jsp" method="GET">
+        <input type="submit" value="Go to User Page">
     </form>
 </section>
 </body>

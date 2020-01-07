@@ -18,6 +18,6 @@ public class DeleteUserServlet extends HttpServlet {
         Long id = Long.parseLong(req.getParameter("id"));
         userService.deleteUser(id);
         resp.setStatus(200);
-        resp.sendRedirect("/allusers");
+        resp.sendRedirect("/admin");
     }
 }

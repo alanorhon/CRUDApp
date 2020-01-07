@@ -15,9 +15,10 @@
 <table style=" width: 30%; border: none">
     <tr>
         <th>Id</th>
-        <th>Name</th>
-        <th>Sex</th>
-        <th>Age</th>
+        <th>Login</th>
+        <th>Password</th>
+        <th>email</th>
+        <th>Role</th>
     </tr>
     <c:forEach items="${requestScope.list}" var="user">
         <tr>
@@ -25,6 +26,7 @@
             <td style="border: 1px solid black; text-align: left">${user.login}</td>
             <td style="border: 1px solid black; text-align: left">${user.password}</td>
             <td style="border: 1px solid black; text-align: left">${user.email}</td>
+            <td style="border: 1px solid black; text-align: left">${user.role}</td>
             <td>
                 <form action="/edituser" method="GET">
                     <input type="submit" value="Edit User"/>
@@ -37,12 +39,18 @@
                     <input type="hidden" name="id" value=${user.id} />
                 </form>
             </td>
-
         </tr>
     </c:forEach>
 </table>
-<form action="index.jsp" method="POST">
+<form action="/adduser" method="GET">
+    <input type="submit" value="Add User">
+</form>
+<form action="index.jsp" method="GET">
     <input type="submit" value="Go back">
 </form>
+<form action="user.jsp" method="GET">
+    <input type="submit" value="Go to User Page">
+</form>
+
 </body>
 </html>

@@ -23,6 +23,7 @@ public class EditUserServlet extends HttpServlet {
         req.setAttribute("login", user.getLogin());
         req.setAttribute("password", user.getPassword());
         req.setAttribute("email", user.getEmail());
+        req.setAttribute("role", user.getRole());
         req.getRequestDispatcher("edituser.jsp").forward(req, resp);
     }
 
@@ -33,10 +34,11 @@ public class EditUserServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String email = req.getParameter("email");
+        String role = req.getParameter("role");
 
-        userService.editUser(new User(id, login, password, email));
+        userService.editUser(new User(id, login, password, email, role));
         resp.setStatus(200);
-        resp.sendRedirect("/allusers");
+        resp.sendRedirect("/admin");
 
 
     }

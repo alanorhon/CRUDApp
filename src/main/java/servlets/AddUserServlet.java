@@ -28,8 +28,10 @@ public class AddUserServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         String email = req.getParameter("email");
-        userService.addUser(new User(login, password, email));
-        resp.setStatus(200);
-        resp.sendRedirect("/allusers");
+        String role = req.getParameter("role");
+        userService.addUser(new User(login, password, email, role));
+        resp.sendRedirect("/admin");
+        req.setAttribute("message", "User added");
     }
 }
+

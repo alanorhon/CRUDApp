@@ -20,20 +20,25 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "role")
+    private String role;
+
     public User() {
     }
 
-    public User(String login, String password, String email) {
+    public User(String login, String password, String email, String role) {
         this.login = login;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
-    public User(Long id, String login, String password, String email) {
+    public User(Long id, String login, String password, String email, String role) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
     public long getId() {
@@ -68,20 +73,29 @@ public class User {
         this.email = email;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return getId() == user.getId() &&
-                getLogin().equals(user.getLogin()) &&
-                getPassword().equals(user.getPassword()) &&
-                getEmail().equals(user.getEmail());
+        return Objects.equals(getId(), user.getId()) &&
+                Objects.equals(getLogin(), user.getLogin()) &&
+                Objects.equals(getPassword(), user.getPassword()) &&
+                Objects.equals(getEmail(), user.getEmail()) &&
+                Objects.equals(getRole(), user.getRole());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLogin(), getPassword(), getEmail());
+        return Objects.hash(getId(), getLogin(), getPassword(), getEmail(), getRole());
     }
 
     @Override
@@ -90,6 +104,6 @@ public class User {
                 "User id: " + id +
                 ", User Login: " + login +
                 ", User password: " + password +
-                ", User email: " + email;
+                ", User email: " + email + " , User role: " + role;
     }
 }

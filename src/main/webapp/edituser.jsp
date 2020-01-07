@@ -16,10 +16,14 @@
         Login: <br><input type="text" name="login" value=${login}> <br>
         Password: <br><input type="text" name="password" value=${password}> <br>
         Email: <br><input type="email" name="email" value=${email}> <br>
+        Role: <br><input type="text" name="role" value="${role}"><br>
         <input type="submit" value="Edit User">
     </form>
-    <form action="index.jsp" method="GET">
+    <form action="/admin" method="GET">
         <input type="submit" value="Go back">
+    </form>
+    <form action="user.jsp" method="GET">
+        <input type="submit" value="Go to User Page">
     </form>
 </section>
 </body>

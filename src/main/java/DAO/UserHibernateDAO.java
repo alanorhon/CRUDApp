@@ -1,6 +1,5 @@
 package DAO;
 
-import Interfaces.UserDAOInterface;
 import model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -38,6 +37,26 @@ public class UserHibernateDAO implements UserDAOInterface {
         Transaction transaction = session.beginTransaction();
         session.save(user);
         transaction.commit();
+        session.close();
+    }
+    @Override
+    public boolean validateUser(String login, String password) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("FROM User where login=:loginParam and password=:passParam");
+        query.setParameter("loginParam", login);
+        query.setParameter("passParam", password);
+        List<User> userList = query.list();
+        session.close();
+        return userList.get(0) != null;
+    }
+
+    @Override
+    public User getUserByLogin(String login) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("FROM User  where login=:loginParam");
+        query.setParameter("loginParam", login);
+        session.close();
+        return  (User) query.list().get(0);
     }
 
     @Override
@@ -46,16 +65,16 @@ public class UserHibernateDAO implements UserDAOInterface {
         Query query = session.createQuery("FROM User where id=:param");
         query.setParameter("param", id);
         List<User> user = query.list();
+        session.close();
         return user.get(0);
     }
 
     @Override
     public void deleteUser(Long id) {
         Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("DELETE FROM User WHERE id = :id").setLong("id", id);
+        Query query = session.createQuery("DELETE FROM User WHERE id = :id");
+        query.setParameter("id", id);
         query.executeUpdate();
-        transaction.commit();
         session.close();
     }
 
@@ -65,9 +84,12 @@ public class UserHibernateDAO implements UserDAOInterface {
         Query query = session.createQuery("update User "
                 + "SET login=:login "
                 + ", password=:password"
-                + ", email=:email");
+                + ", email=:email"
+                + ", role=:role");
         query.setParameter("login", user.getLogin());
         query.setParameter("password", user.getPassword());
         query.setParameter("email", user.getEmail());
+        query.setParameter("role", user.getRole());
+        session.close();
     }
 }

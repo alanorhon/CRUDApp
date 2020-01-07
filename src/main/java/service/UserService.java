@@ -1,12 +1,8 @@
 package service;
 
 import DAO.UserDAOFactory;
-import DAO.UserHibernateDAO;
-import Interfaces.UserDAOInterface;
+import DAO.UserDAOInterface;
 import model.User;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import utils.DBHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +18,7 @@ public class UserService {
         }
         try {
             userDAOFactory = new UserDAOFactory().getFactory();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return instance;
@@ -34,8 +30,21 @@ public class UserService {
         return list;
     }
 
-    public void addUser(User user) {
-        userDAOFactory.addUser(user);
+    public boolean validateUser(String login, String password) {
+        return userDAOFactory.validateUser(login, password);
+    }
+
+    public User getUserByLogin(String login) {
+        return userDAOFactory.getUserByLogin(login);
+    }
+
+    public boolean addUser(User user) {
+        if (userDAOFactory.getUserByLogin(user.getLogin()) == null) {
+            userDAOFactory.addUser(user);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public User getUserById(Long id) {

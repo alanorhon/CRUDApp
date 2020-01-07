@@ -11,9 +11,17 @@
     <title>CRUD App for view and edit Users</title>
 </head>
 <body>
-<ul class="navbar">
-    <li><a href="adduser.jsp">Add user</a></li>
-    <li><a href="/allusers">Show all users</a></li>
-</ul>
+<section class="fields">
+    <form action="/login" method="POST">
+        Login: <br><input type="text" name="login"> <br>
+        Password: <br><input type="text" name="password"> <br>
+        <input type="submit" value="Login"><br>
+    </form>
+</section>
+<H1><%
+    if (request.getAttribute("message") != null) {
+        out.println(request.getAttribute("message"));
+    }
+%></H1>
 </body>
 </html>

@@ -1,6 +1,5 @@
 package DAO;
 
-import Interfaces.UserDAOInterface;
 import utils.Config;
 import utils.DBHelper;
 

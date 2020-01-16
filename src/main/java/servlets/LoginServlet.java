@@ -25,16 +25,17 @@ public class LoginServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        User user;
         if (userService.validateUser(login, password)) {
             HttpSession session = req.getSession();
-            User user = userService.getUserByLogin(login);
-            session.setAttribute("role",user.getRole());
-            if(session.getAttribute("role").equals("admin")){
-                resp.sendRedirect("/admin");
-            }else {
-                resp.sendRedirect("user.jsp");
+            if((user = userService.getUserByLogin(login)) != null){
+                session.setAttribute("role", user.getRole());
+                if (session.getAttribute("role").equals("admin")) {
+                    resp.sendRedirect("/admin");
+                } else {
+                    resp.sendRedirect("/user");
+                }
             }
-
         } else {
             resp.sendRedirect("/login");
         }

@@ -1,46 +1,40 @@
 package service;
 
 import DAO.UserDAOFactory;
-import DAO.UserDAOInterface;
+import DAO.UserDAO;
 import model.User;
 
-import java.io.IOException;
 import java.util.List;
 
 public class UserService {
     private static UserService instance;
-    private static UserDAOInterface userDAOFactory;
-    private UserDAOInterface DAOFactory;
+    private static UserDAO userDAO;
+
 
     public static UserService getInstance() {
         if (instance == null) {
             instance = new UserService();
         }
-        try {
-            userDAOFactory = new UserDAOFactory().getFactory();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        userDAO = new UserDAOFactory().getFactory();
         return instance;
     }
 
 
     public List<User> getAllUsers() {
-        List<User> list = userDAOFactory.getAllUsers();
-        return list;
+        return userDAO.getAllUsers();
     }
 
     public boolean validateUser(String login, String password) {
-        return userDAOFactory.validateUser(login, password);
+        return userDAO.validateUser(login, password);
     }
 
     public User getUserByLogin(String login) {
-        return userDAOFactory.getUserByLogin(login);
+        return userDAO.getUserByLogin(login);
     }
 
     public boolean addUser(User user) {
-        if (userDAOFactory.getUserByLogin(user.getLogin()) == null) {
-            userDAOFactory.addUser(user);
+        if (userDAO.getUserByLogin(user.getLogin()) == null) {
+            userDAO.addUser(user);
             return true;
         } else {
             return false;
@@ -48,15 +42,15 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userDAOFactory.getUserById(id);
+        return userDAO.getUserById(id);
     }
 
 
     public void deleteUser(Long id) {
-        userDAOFactory.deleteUser(id);
+        userDAO.deleteUser(id);
     }
 
     public void editUser(User user) {
-        userDAOFactory.editUser(user);
+        userDAO.editUser(user);
     }
 }

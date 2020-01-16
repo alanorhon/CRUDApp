@@ -45,10 +45,10 @@
 <form action="/adduser" method="GET">
     <input type="submit" value="Add User">
 </form>
-<form action="index.jsp" method="GET">
+<form action="/login" method="GET">
     <input type="submit" value="Go back">
 </form>
-<form action="user.jsp" method="GET">
+<form action="/user" method="GET">
     <input type="submit" value="Go to User Page">
 </form>
 

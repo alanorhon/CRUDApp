@@ -11,15 +11,10 @@
     <title>User page</title>
 </head>
 <body>
-<H1><%
-    if (request.getAttribute("message") != null) {
-        out.println(request.getAttribute("message"));
-    }
-%></H1><br/>
 <H2>You can do nothing on this page<br/>
     Just relax and look on this picture</H2>
 <img src="https://i.gifer.com/fyDA.gif" align="center" width="300px" alt="pic"><br/>
-<form action="index.jsp" method="GET">
+<form action="/login" method="GET">
     <input type="submit" value="Go to Authorisation page">
 </form>
 </body>

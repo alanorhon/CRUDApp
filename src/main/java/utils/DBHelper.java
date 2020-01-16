@@ -1,6 +1,5 @@
 package utils;
 
-import com.mysql.cj.jdbc.Driver;
 import model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -17,7 +16,7 @@ public class DBHelper {
 
     public static Connection getConnection() {
         if (connection == null) {
-            connection = getMysqlConnection();
+            connection = getMySQLConnection();
         }
         return connection;
     }
@@ -29,37 +28,40 @@ public class DBHelper {
         return sessionFactory;
     }
 
-    private static Configuration getMySqlConfiguration() {
-        Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(User.class);
+    private static final String URL = PropertiesReader.getProperty("jdbc.url");
+    private static final String USERNAME = PropertiesReader.getProperty("jdbc.username");
+    private static final String PASSWORD = PropertiesReader.getProperty("jdbc.password");
+    private static final String DRIVER_CLASS = PropertiesReader.getProperty("jdbc.driverClassName");
 
-        configuration.setProperty("hibernate.dialect", Config.getInstance().getDbDialect());
-        configuration.setProperty("hibernate.connection.driver_class", Config.getInstance().getDriverClass());
-        configuration.setProperty("hibernate.connection.url", Config.getInstance().getDbUrl());
-        configuration.setProperty("hibernate.connection.username", Config.getInstance().getDblogin());
-        configuration.setProperty("hibernate.connection.password", Config.getInstance().getDbPassword());
-        configuration.setProperty("hibernate.show_sql", Config.getInstance().getShowSql());
-        configuration.setProperty("hibernate.hbm2ddl.auto", Config.getInstance().getHbm2ddl());
-        return configuration;
+    private static final String HIBERNATE_DIALECT = PropertiesReader.getProperty("hibernate.dialect");
+    private static final String HIBERNATE_SHOW_SQL = PropertiesReader.getProperty("hibernate.show_sql");
+    private static final String HIBERNATE_HBM2DDL_AUTO = PropertiesReader.getProperty("hibernate.hbm2ddl.auto");
+
+    private static Connection getMySQLConnection() {
+        Connection connection = null;
+        try {
+            Class.forName(DRIVER_CLASS);
+            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
     }
 
     private static SessionFactory createSessionFactory() {
-        Configuration configuration = getMySqlConfiguration();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-        builder.applySettings(configuration.getProperties());
-        ServiceRegistry serviceRegistry = builder.build();
-        return configuration.buildSessionFactory(serviceRegistry);
-    }
+        Configuration configuration = new Configuration();
+        configuration.addAnnotatedClass(User.class);
 
-    private static Connection getMysqlConnection() {
-        try {
-            DriverManager.registerDriver((Driver)
-                    Class.forName(Config.getInstance().getDriverClass()).newInstance());
-            return DriverManager.getConnection(Config.getInstance().getDbUrl(),
-                    Config.getInstance().getDblogin(), Config.getInstance().getDbPassword());
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-            throw new IllegalStateException();
-        }
+        configuration.setProperty("hibernate.connection.url", URL);
+        configuration.setProperty("hibernate.connection.username", USERNAME);
+        configuration.setProperty("hibernate.connection.password", PASSWORD);
+        configuration.setProperty("hibernate.connection.driver_class", DRIVER_CLASS);
+
+        configuration.setProperty("hibernate.dialect", HIBERNATE_DIALECT);
+        configuration.setProperty("hibernate.show_sql", HIBERNATE_SHOW_SQL);
+        configuration.setProperty("hibernate.hbm2ddl.auto", HIBERNATE_HBM2DDL_AUTO);
+
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+        return configuration.buildSessionFactory(serviceRegistry);
     }
 }

@@ -6,25 +6,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserJdbcDAO implements UserDAOInterface {
-    private static UserJdbcDAO instance;
+public class UserJdbcDAO implements UserDAO {
     private static Connection connection;
 
-    private UserJdbcDAO(Connection daoConnection) {
+    UserJdbcDAO(Connection daoConnection) {
         connection = daoConnection;
-    }
-
-    public static UserJdbcDAO getInstance(Connection daoConnection) {
-        if (instance == null) {
-            instance = new UserJdbcDAO(daoConnection);
-        }
-        return instance;
     }
 
     @Override
     public void addUser(User user) {
         try {
-            PreparedStatement stmt = connection.prepareStatement("insert into users(login, password, email, role) value (?,?,?,?)");
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO users(login, password, email, role) VALUE (?,?,?,?)");
             stmt.setString(1, user.getLogin());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
@@ -57,7 +49,7 @@ public class UserJdbcDAO implements UserDAOInterface {
     public User getUserByLogin(String login) {
         User user = null;
         try {
-            PreparedStatement stmt = connection.prepareStatement("select * from users where login=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE login=?");
             stmt.setString(1, login);
             stmt.execute();
             ResultSet resultSet = stmt.getResultSet();
@@ -79,7 +71,7 @@ public class UserJdbcDAO implements UserDAOInterface {
     @Override
     public void deleteUser(Long id) {
         try {
-            PreparedStatement stmt = connection.prepareStatement("delete from users where id=?");
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM users WHERE id=?");
             stmt.setLong(1, id);
             stmt.executeUpdate();
             stmt.close();
@@ -91,7 +83,7 @@ public class UserJdbcDAO implements UserDAOInterface {
     public User getUserById(Long id) {
         User user = null;
         try {
-            PreparedStatement stmt = connection.prepareStatement("select * from users where id=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE id=?");
             stmt.setLong(1, id);
             stmt.execute();
             ResultSet resultSet = stmt.getResultSet();
@@ -114,7 +106,7 @@ public class UserJdbcDAO implements UserDAOInterface {
     public void editUser(User user) {
         try {
             PreparedStatement stmt = connection.prepareStatement
-                    ("update users set login=?, password=?, email=?, role=? where id=?");
+                    ("UPDATE users SET login=?, password=?, email=?, role=? WHERE id=?");
             stmt.setString(1, user.getLogin());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
@@ -132,7 +124,7 @@ public class UserJdbcDAO implements UserDAOInterface {
         List<User> allUsers = new ArrayList<>();
         try {
             Statement stmt = connection.createStatement();
-            stmt.execute("select * from users");
+            stmt.execute("SELECT * FROM users");
             ResultSet result = stmt.getResultSet();
             while (result.next()) {
                 Long id = result.getLong("id");

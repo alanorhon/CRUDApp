@@ -19,10 +19,6 @@
         <input type="submit" value="Login"><br>
     </form>
 </section>
-<H1><%
-    if (request.getAttribute("message") != null) {
-        out.println(request.getAttribute("message"));
-    }
-%></H1>
+<H1></H1>
 </body>
 </html>

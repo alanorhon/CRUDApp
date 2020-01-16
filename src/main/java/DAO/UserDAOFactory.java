@@ -1,16 +1,14 @@
 package DAO;
 
-import utils.Config;
 import utils.DBHelper;
-
-import java.io.IOException;
+import utils.PropertiesReader;
 
 public class UserDAOFactory {
-    public UserDAOInterface getFactory() throws IOException {
-        if (Config.getInstance().getDriver().equals("Hibernate")) {
-            return UserHibernateDAO.getInstance(DBHelper.getSessionFactory());
+    public UserDAO getFactory() {
+        if (PropertiesReader.getProperty("DAO").equals("JDBC")) {
+            return new UserJdbcDAO(DBHelper.getConnection());
         } else {
-            return UserJdbcDAO.getInstance(DBHelper.getConnection());
+            return new UserHibernateDAO(DBHelper.getSessionFactory());
         }
     }
 }

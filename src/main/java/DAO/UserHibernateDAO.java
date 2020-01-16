@@ -1,95 +1,80 @@
 package DAO;
 
 import model.User;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import utils.DBHelper;
+
 
 import java.util.List;
 
-public class UserHibernateDAO implements UserDAOInterface {
-    private static UserHibernateDAO instance;
-    private static SessionFactory sessionFactory;
+public class UserHibernateDAO implements UserDAO {
+    private SessionFactory sessionFactory;
 
-    private UserHibernateDAO(SessionFactory daoSessionFactory) {
-        sessionFactory = daoSessionFactory;
-    }
-
-    public static UserHibernateDAO getInstance(SessionFactory sessionFactory) {
-        if (instance == null) {
-
-            instance = new UserHibernateDAO(sessionFactory);
-        }
-        return instance;
+    public UserHibernateDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = DBHelper.getSessionFactory();
     }
 
     @Override
     public List<User> getAllUsers() {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("FROM User");
-        return (List<User>) query.list();
+        List<User> userList;
+        try (Session session = sessionFactory.openSession()) {
+            userList = (List<User>) session.createQuery("FROM User").list();
+        }
+        return userList;
     }
 
     @Override
     public void addUser(User user) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(user);
-        transaction.commit();
-        session.close();
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.save(user);
+            transaction.commit();
+        }
     }
     @Override
     public boolean validateUser(String login, String password) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("FROM User where login=:loginParam and password=:passParam");
-        query.setParameter("loginParam", login);
-        query.setParameter("passParam", password);
-        List<User> userList = query.list();
-        session.close();
-        return userList.get(0) != null;
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM User WHERE login=:loginParam AND password=:passParam")
+            .setParameter("loginParam", login)
+            .setParameter("passParam", password) != null;
+
+        }
     }
 
     @Override
     public User getUserByLogin(String login) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("FROM User  where login=:loginParam");
-        query.setParameter("loginParam", login);
-        session.close();
-        return  (User) query.list().get(0);
+        User user;
+        try (Session session = sessionFactory.openSession()) {
+            user = (User) session.createQuery("FROM User WHERE login=:login")
+            .setParameter("login", login).uniqueResult();
+        }
+        return user;
     }
 
     @Override
     public User getUserById(Long id) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("FROM User where id=:param");
-        query.setParameter("param", id);
-        List<User> user = query.list();
-        session.close();
-        return user.get(0);
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(User.class, id);
+        }
     }
 
     @Override
     public void deleteUser(Long id) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("DELETE FROM User WHERE id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
-        session.close();
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.delete(getUserById(id));
+            transaction.commit();
+        }
     }
 
     @Override
     public void editUser(User user) {
-        Session session = sessionFactory.openSession();
-        Query query = session.createQuery("update User "
-                + "SET login=:login "
-                + ", password=:password"
-                + ", email=:email"
-                + ", role=:role");
-        query.setParameter("login", user.getLogin());
-        query.setParameter("password", user.getPassword());
-        query.setParameter("email", user.getEmail());
-        query.setParameter("role", user.getRole());
-        session.close();
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.update(user);
+            transaction.commit();
+        }
     }
 }

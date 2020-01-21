@@ -1,1 +1,9 @@
-CRUD приложение
+CRUD app
+      - Tomcat
+      - JDBC
+      - Hibernate
+      - Servlets
+      - ServletFilter
+      - JSP
+      - JSTL
+      - MySQL
